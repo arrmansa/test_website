@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+    <input type="number" value="0.03" step="any" min="0" max="1" id="inputprobability">
+    <button type="button" onclick="runstuff();">Get Value</button>
+    <button type="button" onclick="clearstuff();">clear</button>
+    <script>
+    function runstuff(){
+      let count = 1
+      var probability = document.getElementById("inputprobability").value;
+      if((probability < 1) & (probability > 0)){
+          while(probability < Math.random()){
+            count += 1;
+          }
+          document.querySelector('#text_here').innerHTML += "Took " + count + " tries for probablity " + probability + "<br>";
+      }
+      else{
+          document.querySelector('#text_here').innerHTML = "Error";
+      }
+    }
+    function clearstuff(){
+      document.querySelector('#text_here').innerHTML = "";
+    }
+    </script>
+    <p id="text_here"></p>
+  </body>
+</html>
