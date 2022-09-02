@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
   <body>
+    <p id="description">
+        method 1 - Get Value (slowest) repeatedly does lotteries and returns the number of tries (slowest)<br>
+        method 2 - Get Value with hax (fastest) returns the same distribution in one shot using math : ceil(ln(random_uniform)/ln(1-p))<br>
+        method 3 - Get Value with chunks (medium speed) does chunk size number of lotteries in every step (instead of 1) to speed up method 1 <br>
+     </p>
     <label>Enter Probability
         <input type="number" value="0.03" step="any" min="0" max="1" id="inputprobability" oninput="this.value=(this.value<0)?(-this.value):this.value;this.value=(this.value>1)?(1):this.value;">
     </label>
