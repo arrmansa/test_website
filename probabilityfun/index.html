@@ -1,23 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
   <body>
-    <input type="number" value="0.03" step="any" min="0" max="1" id="inputprobability">
+    <label>Enter Probability
+        <input type="number" value="0.03" step="any" min="0" max="1" id="inputprobability" oninput="this.value=(this.value<0)?(-this.value):this.value;this.value=(this.value>1)?(1):this.value;">
+    </label>
     <button type="button" onclick="runstuff();">Get Value</button>
+    <button type="button" onclick="runstuff_hax();">Get Value with hax</button>
+    <button type="button" onclick="runstuff_chunks();">Get Value with chunks</button>
     <button type="button" onclick="clearstuff();">clear</button>
+    <label>Enter chunk size (only for Get Value with chunks)
+        <input type="number" value="1000" step="1" min="1" id="chunksize" oninput="this.value=(this.value<1)?(1):Math.ceil(Math.max(this.value,1));">
+    </label>
     <script>
+    //basic    
     function runstuff(){
-      let count = 1
-      var probability = document.getElementById("inputprobability").value;
-      if((probability < 1) & (probability > 0)){
-          while(probability < Math.random()){
+      var p = Number(document.getElementById("inputprobability").value);
+      if((p < 1) & (p > 0)){
+          var count = 1;
+          while(p < Math.random()){
             count += 1;
           }
-          document.querySelector('#text_here').innerHTML += "Took " + count + " tries for probablity " + probability + "<br>";
+          document.querySelector('#text_here').innerHTML += "Took " + count + " tries for probablity " + p + "<br>";
       }
       else{
           document.querySelector('#text_here').innerHTML = "Error";
       }
     }
+    //hax
+    function runstuff_hax(){
+      var p = Number(document.getElementById("inputprobability").value);
+      if((p < 1) & (p > 0)){
+          var count = Math.ceil(Math.log(Math.random())/Math.log1p(-p));
+          document.querySelector('#text_here').innerHTML += "Took " + count + " tries for probablity " + p + "<br>";
+      }
+      else{
+          document.querySelector('#text_here').innerHTML = "Error";
+      }
+    }
+    //chunk
+    function chunk_probe(chunk_n, p, probe_number){
+        var value = (1-p)**chunk_n;
+        var probability_part = 0;
+        var index = 0;
+        while((index < chunk_n) & (value < probe_number)){
+            value += ((1-p)**index)*p;
+            index += 1;
+        }
+        return index + 1;
+    }
+    function runstuff_chunks(){
+      var p = Number(document.getElementById("inputprobability").value);
+      var chunk_n = Math.ceil(Math.max(Number(document.getElementById("chunksize").value),1));
+      if((p < 1) & (p > 0)){
+          var chunk_p = 1-(1-p)**chunk_n;
+          var number = Math.random();
+          var count = 0;
+          while(chunk_p < number){
+              count += chunk_n;
+              number = Math.random();
+          }
+          count += chunk_probe(chunk_n, p, 1-number);
+          document.querySelector('#text_here').innerHTML += "Took " + count + " tries for probablity " + p + "<br>";
+      }
+      else{
+          document.querySelector('#text_here').innerHTML = "Error";
+      }
+    }
+    //Clear
     function clearstuff(){
       document.querySelector('#text_here').innerHTML = "";
     }
